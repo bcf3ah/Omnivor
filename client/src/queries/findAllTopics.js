@@ -7,6 +7,10 @@ export default gql`
     title
     imageURL
     question
+    author {
+      id
+      firstName
+    }
   }
 }
 `;

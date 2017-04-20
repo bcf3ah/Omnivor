@@ -40,7 +40,7 @@ type Perspective {
   id: ID!
   author: User!
   #The parent topic of the perspective
-  topic: Topic!
+  topicId: ID!
   content: String!
   questions: String
   #createdAt is provided as a string by Momentjs
@@ -60,7 +60,7 @@ type RootQuery {
 
 type Mutation {
   addTopic (title: String!, question: String!, imageURL: String!): Topic
-  addPerspective (content: String!): Perspective
+  addPerspective (topicId: ID!, content: String!): Perspective
 }
 
 schema {

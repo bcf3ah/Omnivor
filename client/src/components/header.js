@@ -6,6 +6,7 @@ import {graphql} from 'react-apollo';
 
 //Local files
 import addTopic from '../mutations/addTopic';
+import findAllTopics from '../queries/findAllTopics';
 import * as actions from '../actions';
 
 class Header extends Component {
@@ -24,13 +25,19 @@ class Header extends Component {
               title: this.state.title,
               question: this.state.question,
               imageURL: this.state.imageURL
-            }
+            },
+            refetchQueries: [{
+              query: findAllTopics
+            }]
           })
       }
 
       renderAuthButtons(){
-        if(this.props.authenticated){
-          return <li><Link to="/signout">Sign out</Link></li>
+        if (this.props.authenticated) {
+          return [
+            <li key='HeaderFirstName'><Link to='#'>{this.props.currentUserName}</Link></li>,
+            <li key='HeaderSignOut'><Link to="/signout">Sign out</Link></li>
+          ]
         } else {
           return <li><Link to="/signin">Sign in / Sign up</Link></li>
         }
@@ -76,7 +83,8 @@ class Header extends Component {
 
 function mapStateToProps(state){
   return {
-    authenticated: state.auth.authenticated
+    authenticated: state.auth.authenticated,
+    currentUserName: state.currentUserName
   }
 }
 

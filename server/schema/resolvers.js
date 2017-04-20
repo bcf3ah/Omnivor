@@ -11,7 +11,7 @@ export default {
       return User.find({});
     },
     findTopic(root, {id}) {
-      return Topic.findById(id);
+      return Topic.findById(id).populate('perspectives');
     },
     findAllTopics(root, args) {
       return Topic.find({});
@@ -30,8 +30,8 @@ export default {
       addTopic(root, {title, question, imageURL}, context){
         return User.addTopic(context.user, title, question, imageURL);
       },
-      addPerspective(root, {content}, context){
-        return User.addPerspective(context.user, content);
+      addPerspective(root, {topicId, content}, context){
+        return User.addPerspective(context.user, content, topicId);
       }
   }
 };

@@ -69,15 +69,32 @@ userSchema.methods.comparePassword = function(candidatePassword, callback) {
 //ASSOCIATIONS
 //==============================================================================
 //Associate Perspectives with User (user should be the current user from context!)
-userSchema.statics.addPerspective = function(user, content) {
+userSchema.statics.addPerspective = function(user, content, topicId) {
     const that = this;
     const id = user.id;
-    return Perspective.create({content}, function(err, perspective){
+    const firstName = user.firstName;
+    const lastName = user.lastName;
+    return Perspective.create({content, topicId}, function(err, perspective){
       if(err){
         console.log(err);
       } else {
-        perspective.author.id = id; //associate perspective with User via id. Later will do names
+        //associate perspective with User via id, firstName and lastName
+        perspective.author.id = id;
+        perspective.author.firstName = firstName;
+        perspective.author.lastName = lastName;
         perspective.save();
+
+        //push it into the topic's perspective array
+        Topic.findById(topicId, function(err, topic){
+            if(err){
+              console.log(err);
+            } else {
+              topic.perspectives.push(perspective);
+              topic.save();
+            }
+        });
+
+        //Push it into the author's perspective array
         that.findById(user.id, function(err, user){
             if(err){
                 console.log(err);
@@ -98,11 +115,13 @@ userSchema.statics.findUserPerspectives = function(id){
 userSchema.statics.addTopic = function(user, title, question, imageURL) {
     const that = this;
     const id = user.id;
+    const firstName = user.firstName;
     return Topic.create({title, question, imageURL}, function(err, topic){
       if(err){
         console.log(err);
       } else {
         topic.author.id = id;
+        topic.author.firstName = firstName;
         topic.save();
         that.findById(id, function(err, user){
             if(err){

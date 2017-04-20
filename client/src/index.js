@@ -9,10 +9,11 @@ import {ApolloProvider} from 'react-apollo';
 //Local Files
 import rootReducer from './reducers/index';
 import App from './components/App';
-import HomeFeed from './components/homeFeed';
+import TopicList from './components/Topics/topicList';
 import AuthForms from './components/auth/authForms';
 import RequireAuth from './components/requireAuth';
 import Signout from './components/auth/signout';
+import TopicDetail from './components/Topics/topicDetail';
 import './styles/index.css';
 
 
@@ -58,9 +59,14 @@ const store = createStoreWithMiddleware(
 
 //if token exists, consider user to be signed in. Using AuthToken since we use token above with Apollo
 const AuthToken = localStorage.getItem('token');
-if(AuthToken){
-  //create an instance of the redux store where the user is authenticated
+const currentUserName = localStorage.getItem('currentUserName');
+if(AuthToken && currentUserName){
+  //create an instance of the redux store where the user is authenticated and the currentUserName is set to the authed user's name
   store.dispatch({type: 'AUTH_USER'});
+	store.dispatch({
+		type: 'SET_CURRENT_USER_NAME',
+		payload: currentUserName
+	})
 }
 
 ReactDOM.render(
@@ -69,7 +75,8 @@ ReactDOM.render(
       <Route path='/' component={App}>
 				<Route path='/signin' component={AuthForms} />
 				<Route path='/signout' component={Signout} />
-				<Route path='/home' component={RequireAuth(HomeFeed)} />
+				<Route path='/home' component={RequireAuth(TopicList)} />
+				<Route path='/topics/:topicId' component={RequireAuth(TopicDetail)} />
       </Route>
     </Router>
   </ApolloProvider>,

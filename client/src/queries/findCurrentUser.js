@@ -5,6 +5,8 @@ export default gql`
   findCurrentUser {
     id
     email
+    firstName
+    lastName
     perspectives{
       id
       content

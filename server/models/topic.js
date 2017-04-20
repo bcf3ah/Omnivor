@@ -8,13 +8,14 @@ var topicSchema = new mongoose.Schema({
           ref: 'User'
         },
         firstName: String,
-        lastName: String
+        lastName: String,
+        email: String
     },
     imageURL: String,
     title: String,
     question: String,
     createdAt: String,
-    cusor: String,
+    cursor: String,
     perspectives: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Perspective"
@@ -24,7 +25,7 @@ var topicSchema = new mongoose.Schema({
 topicSchema.statics.addPerspective = function(topicId, content, createdAt) {
     const that = this;
 
-    return Perspective.create({topicId, content, createdAt}, function(err, perspective){
+    return Perspective.create({topicId, content}, function(err, perspective){
       if(err){
         console.log(err);
       } else {

@@ -14,13 +14,18 @@ function userJWT(user){
 //create a helper function to hanlde logins and to give the users tokens upon signing in
 exports.signin = function(req, res, next){
   //User is authorized, just need to give them a token now. Remember, once user is authorized, Passport assigns them to req.user!
-  res.send({token: userJWT(req.user)});
+  res.send({
+    token: userJWT(req.user),
+    firstName: req.user.firstName
+  });
 }
 
 
 //create a helper function to handle signups
 exports.signup = function(req, res, next){
   const email = req.body.email;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
   const password = req.body.password;
 
   //make sure both email and password are filled out
@@ -40,12 +45,15 @@ exports.signup = function(req, res, next){
 
     //if email is free, create new user and save it to db
     if(!existingUser){
-      const user = new User({email: email, password: password});
+      const user = new User({email, firstName, lastName, password});
       user.save(function(err){
         if(err){return next(err)};
 
         //if all good, respond by giving the new user a web token (using the function defined above) which they can use to make authenticated requests in the future!
-        res.json({token: userJWT(user)});
+        res.json({
+          token: userJWT(user),
+          firstName: user.firstName
+        });
       });
     }
   })
