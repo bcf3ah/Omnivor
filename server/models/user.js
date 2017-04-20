@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
+import passportLocalMongoose from 'passport-local-mongoose';
 
 //Local Files
 import Perspective from './perspective';
@@ -149,5 +150,7 @@ userSchema.statics.findCurrentUser = function(id){
     return user;
   });
 }
+
+userSchema.plugin(passportLocalMongoose, {usernameField: 'email'});
 
 export default mongoose.model("User", userSchema);

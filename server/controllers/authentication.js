@@ -2,7 +2,7 @@
 import User from '../models/user';//import User class
 import config from '../config';
 import jwt from 'jwt-simple';
-
+import passport from 'passport';
 
 //create function that will take user's id and encode it with our secret key to create a jwt on signup and login
 function userJWT(user){
@@ -29,32 +29,50 @@ exports.signup = function(req, res, next){
   const password = req.body.password;
 
   //make sure both email and password are filled out
-  if(!email || !password){
-    return res.status(422).send({error: 'Email and password are required!'});//want a return statement here so it stops the whole process, preventing it from still trying to create a user!
+  if(!email || !password || !firstName || !lastName){
+    return res.status(422).send({error: 'Email, name, and password are required please'});//want a return statement here so it stops the whole process, preventing it from still trying to create a user!
   }
 
-  //see if a user with given email exists using req.body
-  User.findOne({email: email}, function(err, existingUser){
-    //handle any potential errors associated with db
-    if(err){ return next(err); }
-
-    //if email exists, throw an error
-    if(existingUser){
-      return res.status(422).send({error: 'That email is taken'});//again, use return keyword to stop evertying
+  //Register new user using Passport Local Mongoose strategy
+  User.register(new User({email, firstName, lastName}), password, function(err, user){
+    if (err) {
+      console.log(err);
+      return res.status(422).send({error: 'Something went wrong with passport local mongoose'});
     }
+    passport.authenticate('local', {session: false});
+    res.send({
+      token: userJWT(user),
+      firstName: user.firstName
+    });
 
-    //if email is free, create new user and save it to db
-    if(!existingUser){
-      const user = new User({email, firstName, lastName, password});
-      user.save(function(err){
-        if(err){return next(err)};
-
-        //if all good, respond by giving the new user a web token (using the function defined above) which they can use to make authenticated requests in the future!
-        res.json({
-          token: userJWT(user),
-          firstName: user.firstName
-        });
-      });
-    }
   })
+
+//=============================================================================================================================
+//Using normal local strategy and bcrypt
+//============================================================================================================================
+  // //see if a user with given email exists using req.body
+  // User.findOne({email: email}, function(err, existingUser){
+  //   //handle any potential errors associated with db
+  //   if(err){ return next(err); }
+  //
+  //   //if email exists, throw an error
+  //   if(existingUser){
+  //     return res.status(422).send({error: 'That email is taken'});//again, use return keyword to stop evertying
+  //   }
+  //
+  //   //if email is free, create new user and save it to db
+  //   if(!existingUser){
+  //     const user = new User({email, firstName, lastName, password});
+  //     user.save(function(err){
+  //       if(err){return next(err)};
+  //
+  //       //if all good, respond by giving the new user a web token (using the function defined above) which they can use to make authenticated requests in the future!
+  //       res.json({
+  //         token: userJWT(user),
+  //         firstName: user.firstName
+  //       });
+  //     });
+  //   }
+  // })
+//==================================================================================================================================
 }

@@ -8,6 +8,7 @@ query FindTopic($id: ID!){
 	    imageURL
 	    question
 			author{
+				id
 				firstName
 				lastName
 			}

@@ -5,6 +5,7 @@ import config from '../config';
 import LocalStrategy from 'passport-local';
 
 
+
 //Create Local Strategy
 const localLogin = new LocalStrategy({usernameField: 'email'}, function(email, password, done){
   //verify email and password
@@ -59,4 +60,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done){ //payload 
 
 //Tell Passport to use this JWT Strategy that we so kindly made for it
 passport.use(jwtLogin);
-passport.use(localLogin);
+//passport.use(localLogin);
+
+//Local Strategy from passport-local-mongoose
+passport.use(User.createStrategy());
