@@ -4,6 +4,7 @@ import {Row, Input, Button} from 'react-materialize';
 
 //Local Files
 import findAllTopics from '../queries/findAllTopics';
+import findCurrentUser from '../queries/findCurrentUser';
 import addPerspective from '../mutations/addPerspective';
 
 class HomeFeed extends Component {
@@ -38,5 +39,6 @@ class HomeFeed extends Component {
 
 export default compose(
   graphql(findAllTopics),
+  graphql(findCurrentUser),
   graphql(addPerspective)
 )(HomeFeed);

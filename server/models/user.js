@@ -94,15 +94,17 @@ userSchema.statics.findUserPerspectives = function(id){
     return this.findById(id).populate('perspectives').then(user => user.perspectives);
 }
 
-//Associate Topics with User (userId should be that of the current user!)
-userSchema.statics.addTopic = function(userId, title, question, imageURL, createdAt) {
+//Associate Topics with User (user should be the current user!)
+userSchema.statics.addTopic = function(user, title, question, imageURL) {
     const that = this;
-
-    return Topic.create({title, question, imageURL, createdAt}, function(err, topic){
+    const id = user.id;
+    return Topic.create({title, question, imageURL}, function(err, topic){
       if(err){
         console.log(err);
       } else {
-        that.findById(userId, function(err, user){
+        topic.author.id = id;
+        topic.save();
+        that.findById(id, function(err, user){
             if(err){
                 console.log(err);
             } else {
@@ -114,9 +116,17 @@ userSchema.statics.addTopic = function(userId, title, question, imageURL, create
     });
 }
 
-userSchema.statics.findPerspectives = function(id){
+userSchema.statics.findUserTopics = function(id){
     return this.findById(id).populate('topics').then(user => user.topics);
 }
 
+//==============================================================================
+//Query current User via JWT and ID
+//==============================================================================
+userSchema.statics.findCurrentUser = function(id){
+  return this.findById(id).populate('perspectives').populate('topics').exec(function(err, user){
+    return user;
+  });
+}
 
 export default mongoose.model("User", userSchema);

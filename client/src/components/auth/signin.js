@@ -32,7 +32,7 @@ class Signin extends Component {
   render(){
     return (
       <Row>
-          <Input type="email" vale={this.state.email} onChange={e => this.setState({email: e.target.value})} s={12} />
+          <Input type="email" value={this.state.email} onChange={e => this.setState({email: e.target.value})} s={12} />
           <Input type="password" value={this.state.password} onChange={e => this.setState({password: e.target.value})} s={12} />
           {this.renderAlert()}
           <Button waves='light' onClick={this.handleFormSubmit.bind(this)}>Sign in</Button>

@@ -23,15 +23,12 @@ export default {
       return Perspective.find({});
     },
     findCurrentUser(root, args, context){
-      return context.user;
+      return User.findCurrentUser(context.user.id);
     }
   },
   Mutation: {
-      addUser(root, { email, firstName, lastName }){
-        return User.create({email, firstName, lastName});
-      },
-      addTopic(root, {title, question, imageURL}){
-        return Topic.create({title, question, imageURL});
+      addTopic(root, {title, question, imageURL}, context){
+        return User.addTopic(context.user, title, question, imageURL);
       },
       addPerspective(root, {content}, context){
         return User.addPerspective(context.user, content);

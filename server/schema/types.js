@@ -12,6 +12,7 @@ type User {
   birthday: Int
   followers: [User!]
   perspectives: [Perspective!]
+  topics: [Topic!]
   imageURL: String
 }
 
@@ -58,7 +59,6 @@ type RootQuery {
 }
 
 type Mutation {
-  addUser (email: String!, firstName: String!, lastName: String!): User
   addTopic (title: String!, question: String!, imageURL: String!): Topic
   addPerspective (content: String!): Perspective
 }

@@ -15,13 +15,13 @@ const localLogin = new LocalStrategy({usernameField: 'email'}, function(email, p
       if (!user) {
         return done(null, false)//no error per se, but no user so false
       }
+
       //compare passwords - is the request password == user.password? Well, user.password is stored as a salt, so need to decode it
       user.comparePassword(password, function(err, isMatch){
         if(err){
           return done(err);
         }
         if(!isMatch){
-          console.log('PROBLEM IS HERE!');
           return done(null, false);
         } //if password's didn't match, no error technically, but false on the user
 

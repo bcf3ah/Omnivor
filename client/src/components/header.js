@@ -5,27 +5,40 @@ import {connect} from 'react-redux';
 import {graphql} from 'react-apollo';
 
 //Local files
-import findCurrentUser from '../queries/findCurrentUser';
+import addTopic from '../mutations/addTopic';
 import * as actions from '../actions';
 
 class Header extends Component {
+      constructor(props){
+          super(props);
+          this.state = {
+            title: '',
+            question: '',
+            imageURL: ''
+          }
+      }
+
+      addTopic(){
+          this.props.mutate({
+            variables: {
+              title: this.state.title,
+              question: this.state.question,
+              imageURL: this.state.imageURL
+            }
+          })
+      }
 
       renderAuthButtons(){
         if(this.props.authenticated){
-          return <li><Link to="/signin" onClick={this.handleSignout.bind(this)}>Sign out</Link></li>
+          return <li><Link to="/signout">Sign out</Link></li>
         } else {
           return <li><Link to="/signin">Sign in / Sign up</Link></li>
         }
       }
 
-      handleSignout(){
-        this.props.signout();
-      }
-
       render(){
         return (
             <Navbar style={{paddingLeft: 20, paddingRight: 20, backgroundColor: '#1E90FF'}} brand='Omnivor' right>
-
                 <li><Link to="/home">Home</Link></li>
                 {this.renderAuthButtons()}
                 <li>
@@ -39,15 +52,20 @@ class Header extends Component {
                     <Row>
                         <Input s={12}
                           label="Topic"
-
+                          value={this.state.title}
+                          onChange={e => this.setState({title: e.target.value})}
                         />
                         <Input s={12}
-                          label="Question to start things off" />
-
+                          label="Question to start things off"
+                          value={this.state.question}
+                          onChange={e => this.setState({question: e.target.value})}
+                        />
                         <Input s={12}
-                          label="Image URL" />
-
-                        <Button waves='light' modal='close'>Submit</Button>
+                          label="Image URL"
+                          value={this.state.imageURL}
+                          onChange={e => this.setState({imageURL: e.target.value})}
+                        />
+                        <Button waves='light' modal='close' onClick={this.addTopic.bind(this)}>Submit</Button>
                     </Row>
                   </Modal>
                 </li>
@@ -62,6 +80,6 @@ function mapStateToProps(state){
   }
 }
 
-const HeaderWithGQL = graphql(findCurrentUser)(Header);
+const HeaderWithGQL = graphql(addTopic)(Header);
 
 export default connect(mapStateToProps, actions)(HeaderWithGQL);

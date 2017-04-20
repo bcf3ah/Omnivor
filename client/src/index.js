@@ -12,6 +12,7 @@ import App from './components/App';
 import HomeFeed from './components/homeFeed';
 import AuthForms from './components/auth/authForms';
 import RequireAuth from './components/requireAuth';
+import Signout from './components/auth/signout';
 import './styles/index.css';
 
 
@@ -67,6 +68,7 @@ ReactDOM.render(
     <Router history={browserHistory}>
       <Route path='/' component={App}>
 				<Route path='/signin' component={AuthForms} />
+				<Route path='/signout' component={Signout} />
 				<Route path='/home' component={RequireAuth(HomeFeed)} />
       </Route>
     </Router>
