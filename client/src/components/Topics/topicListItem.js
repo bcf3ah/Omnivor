@@ -17,7 +17,7 @@ class TopicListItem extends Component {
                     <div className="card-stacked">
                       <div className="card-content">
                         <h6>{topic.title}</h6>
-												<h6>{topic.author.firstName}</h6>
+												<h6>{topic.author.firstName} {topic.author.lastName}</h6>
                         <p>{topic.question}</p>
                       </div>
                       <div className="card-action" style={{paddingTop: 8, paddingBottom: 12, paddingLeft: 14}}>

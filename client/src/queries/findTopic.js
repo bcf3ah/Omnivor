@@ -7,11 +7,16 @@ query FindTopic($id: ID!){
 	    title
 	    imageURL
 	    question
+			author{
+				firstName
+				lastName
+			}
 			perspectives {
 				id
 				content
 				author{
 					firstName
+					lastName
 				}
 			}
 	  }

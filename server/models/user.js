@@ -116,12 +116,14 @@ userSchema.statics.addTopic = function(user, title, question, imageURL) {
     const that = this;
     const id = user.id;
     const firstName = user.firstName;
+    const lastName = user.lastName;
     return Topic.create({title, question, imageURL}, function(err, topic){
       if(err){
         console.log(err);
       } else {
         topic.author.id = id;
         topic.author.firstName = firstName;
+        topic.author.lastName = lastName;
         topic.save();
         that.findById(id, function(err, user){
             if(err){

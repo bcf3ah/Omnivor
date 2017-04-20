@@ -59,7 +59,7 @@ class TopicDetail extends Component {
 		                    </div>
 		                    <div className="card-stacked">
 		                      <div className="card-content">
-		                        <h6>{topic.title}</h6>
+		                        <h6>{topic.title} - {topic.author.firstName} {topic.author.lastName}</h6>
 		                        <p>{topic.question}</p>
 		                      </div>
 		                    </div>
