@@ -27,9 +27,9 @@ type Topic {
   author: User!
   title: String!
   question: String!
-  imageURL: String
-  #createdAt will be a string date formed by Momentjs
-  createdAt: String
+  imageURL: String!
+  #createdAt will be a string date formed by Momentjs which takes Strings
+  createdAt: String!
   #cursor is used for cursor-pagination
   cursor: String
   perspectives: [Perspective!]
@@ -53,14 +53,15 @@ type RootQuery {
   findAllUsers: [User]
   findTopic(id: ID!): Topic
   findAllTopics: [Topic]
+  findUserTopics(id: ID!): [Topic]
   findUserPerspectives(id: ID!): [Perspective]
   findAllPerspectives: [Perspective]
   findCurrentUser: User!
 }
 
 type Mutation {
-  addTopic (title: String!, question: String!, imageURL: String!): Topic
-  addPerspective (topicId: ID!, content: String!): Perspective
+  addTopic (title: String!, question: String!, imageURL: String!, createdAt: String!): Topic
+  addPerspective (topicId: ID!, content: String!, createdAt: String!): Perspective
 }
 
 schema {

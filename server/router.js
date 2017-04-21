@@ -7,10 +7,6 @@ const requireAuth = passport.authenticate('jwt', {session: false});
 const requireAuthOnSignin = passport.authenticate('local', {session: false});
 
 module.exports = function(app){
-    app.get('/', requireAuth, function(req, res){ //saying any request to this route will pass through our auth middleware first! If not authorized, we'll see an "unauthorized" message in the response. If not, we'll see....
-      res.send('If you are seeing this, the secret key is SHIBBIDY DIBBIDY');
-    });
-
     app.get('/checkUser', requireAuth, function(req, res){ //if logged in, this should send the data of the current user. Passport assigns
       res.send(req.user);
     });

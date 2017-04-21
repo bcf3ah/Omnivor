@@ -10,12 +10,14 @@ export default gql`
     perspectives{
       id
       content
+      createdAt
     }
     topics{
       id
       title
       question
       imageURL
+      createdAt
     }
   }
 }

@@ -1,10 +1,12 @@
 import auth from './authReducers';
-import currentUserName from './currentUserName';
+import {currentUserFirstName, currentUserLastName, currentUserID} from './currentUser';
 import {reducer as form} from 'redux-form';
 
 const rootReducer = {
   auth,
-  currentUserName,
+  currentUserFirstName,
+  currentUserLastName,
+  currentUserID,
   form
 };
 

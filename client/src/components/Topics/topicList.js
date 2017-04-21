@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {graphql, compose} from 'react-apollo';
 import {Row, Col, Tab, Tabs} from 'react-materialize';
 import Loader from 'halogen/MoonLoader';
+import {connect} from 'react-redux';
 
 //Local Files
 import findAllTopics from '../../queries/findAllTopics';
-import findCurrentUser from '../../queries/findCurrentUser';
 import TopicListItem from './topicListItem';
 
 class TopicList extends Component {
@@ -25,7 +25,7 @@ class TopicList extends Component {
 				      <Col s={4} m={3} style={{textAlign: 'center'}}>
 				          <div className="sideProfile">
 				              <img src="https://scontent-dft4-1.xx.fbcdn.net/v/t1.0-1/c90.210.540.540/s160x160/12669513_10153359340118837_2929093189808849942_n.jpg?oh=3aeb67f1203a1e4753190e3a83b7e936&oe=593AC6D5" className="img-responsive center-block" alt="Logo" />
-				              <h5 className='text-center'>Brian Fitzsimmons</h5>
+				              <h5 className='text-center'>{this.props.currentUserFirstName} {this.props.currentUserLastName}</h5>
 				          </div>
 				          <br />
 				      </Col>
@@ -79,9 +79,15 @@ class TopicList extends Component {
 	}
 }
 
+function mapStateToProps(state){
+	return {
+		currentUserFirstName: state.currentUserFirstName,
+		currentUserLastName: state.currentUserLastName
+	}
+}
 
-
-export default compose(
-	graphql(findCurrentUser),
+const TopicListWithGQL = compose(
 	graphql(findAllTopics)
 )(TopicList);
+
+export default connect(mapStateToProps)(TopicListWithGQL);

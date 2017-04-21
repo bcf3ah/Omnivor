@@ -14,6 +14,7 @@ import AuthForms from './components/auth/authForms';
 import RequireAuth from './components/requireAuth';
 import Signout from './components/auth/signout';
 import TopicDetail from './components/Topics/topicDetail';
+import ProfileHome from './components/Profile/profileHome';
 import './styles/index.css';
 
 
@@ -40,8 +41,8 @@ networkInterface.use([{
 }]);
 
 const client = new ApolloClient({
-	networkInterface,
-	dataIdFromObject: o => o.id //tell GQL to keep tabs on all objects for requerying
+	networkInterface
+	//dataIdFromObject: o => o.id //tell GQL to keep tabs on all objects for requerying
 });
 
 
@@ -49,24 +50,36 @@ const client = new ApolloClient({
 const apollClientReducer = {apollo: client.reducer()}
 const reducers = Object.assign(rootReducer, apollClientReducer);
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; //for setting up redux dev tools
 
 const store = createStoreWithMiddleware(
 	combineReducers(reducers),
-    compose(
+    composeEnhancers(
         applyMiddleware(client.middleware())
   )
 );
 
 //if token exists, consider user to be signed in. Using AuthToken since we use token above with Apollo
 const AuthToken = localStorage.getItem('token');
-const currentUserName = localStorage.getItem('currentUserName');
-if(AuthToken && currentUserName){
+const currentUserFirstName = localStorage.getItem('currentUserFirstName');
+const currentUserLastName = localStorage.getItem('currentUserLastName');
+const currentUserID = localStorage.getItem('currentUserID');
+
+if(AuthToken && currentUserFirstName && currentUserLastName){
   //create an instance of the redux store where the user is authenticated and the currentUserName is set to the authed user's name
   store.dispatch({type: 'AUTH_USER'});
 	store.dispatch({
-		type: 'SET_CURRENT_USER_NAME',
-		payload: currentUserName
-	})
+		type: 'SET_CURRENT_USER_FIRSTNAME',
+		payload: currentUserFirstName
+	});
+	store.dispatch({
+		type: 'SET_CURRENT_USER_LASTNAME',
+		payload: currentUserLastName
+	});
+	store.dispatch({
+		type: 'SET_CURRENT_USER_ID',
+		payload: currentUserID
+	});
 }
 
 ReactDOM.render(
@@ -75,6 +88,7 @@ ReactDOM.render(
       <Route path='/' component={App}>
 				<Route path='/signin' component={AuthForms} />
 				<Route path='/signout' component={Signout} />
+				<Route path='/profile' component={RequireAuth(ProfileHome)} />
 				<Route path='/home' component={RequireAuth(TopicList)} />
 				<Route path='/topics/:topicId' component={RequireAuth(TopicDetail)} />
       </Route>

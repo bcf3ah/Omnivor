@@ -15,9 +15,9 @@ class TopicListItem extends Component {
                       <img alt='Card Jumbo' className='img-responsive' style={{width:160, height:160}} src={topic.imageURL}/>
                     </div>
                     <div className="card-stacked">
-                      <div className="card-content">
+                      <div style={{paddingBottom: 0}} className="card-content">
                         <h6>{topic.title}</h6>
-												<h6>{topic.author.firstName} {topic.author.lastName}</h6>
+												<h6>{topic.author.firstName} {topic.author.lastName} - <p>{topic.createdAt}</p></h6>
                         <p>{topic.question}</p>
                       </div>
                       <div className="card-action" style={{paddingTop: 8, paddingBottom: 12, paddingLeft: 14}}>

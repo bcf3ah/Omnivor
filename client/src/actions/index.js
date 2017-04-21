@@ -10,11 +10,27 @@ export function signin({email, password}){
         .then(response => {
           //save user's firstName from response to Redux store (for navbar usage. Don't want to keep querying for findCurrentUser) AND to local storage because I need the user's firstName to persist evenn if they refresh the page (and the redux store is reset after refreshes. authenticated: true persisted only because I AUTH_USER if a token is present in local store, which survives refreshes. Need to do the same for firstName now)
           dispatch({
-            type: 'SET_CURRENT_USER_NAME',
+            type: 'SET_CURRENT_USER_FIRSTNAME',
             payload: response.data.firstName
           });
 
-          localStorage.setItem('currentUserName', response.data.firstName);
+          localStorage.setItem('currentUserFirstName', response.data.firstName);
+
+          //save user's lastName too, (separate from firstname to allow flexibility)
+          dispatch({
+            type: 'SET_CURRENT_USER_LASTNAME',
+            payload: response.data.lastName
+          });
+
+          localStorage.setItem('currentUserLastName', response.data.lastName);
+
+          //last, save user's ID so we don't have to query for it in the future
+          dispatch({
+            type: 'SET_CURRENT_USER_ID',
+            payload: response.data.id
+          });
+
+          localStorage.setItem('currentUserID', response.data.id);
 
           //update state to reflect that the user is authenticated
           dispatch({type: 'AUTH_USER'});//we set up a reducer that flips auth state to TRUE when this action.type comes in
@@ -40,11 +56,27 @@ export function signup({email, firstName, lastName, password}){ //should look pr
       .then(response => {
         //save user's firstName from response to Redux store (for navbar usage. Don't want to keep querying for findCurrentUser) AND to local storage because I need the user's firstName to persist evenn if they refresh the page (and the redux store is reset after refreshes. authenticated: true persisted only because I AUTH_USER if a token is present in local store, which survives refreshes. Need to do the same for firstName now)
         dispatch({
-          type: 'SET_CURRENT_USER_NAME',
+          type: 'SET_CURRENT_USER_FIRSTNAME',
           payload: response.data.firstName
         });
 
-        localStorage.setItem('currentUserName', response.data.firstName);
+        localStorage.setItem('currentUserFirstName', response.data.firstName);
+
+        //save user's lastName too, (separate from firstname to allow flexibility)
+        dispatch({
+          type: 'SET_CURRENT_USER_LASTNAME',
+          payload: response.data.lastName
+        });
+
+        localStorage.setItem('currentUserLastName', response.data.lastName);
+
+        //last, save user's ID so we don't have to query for it in the future
+        dispatch({
+          type: 'SET_CURRENT_USER_ID',
+          payload: response.data.id
+        });
+
+        localStorage.setItem('currentUserID', response.data.id);
 
         //update state to reflect that the user is authenticated
         dispatch({type: 'AUTH_USER'});//we set up a reducer that flips auth state to TRUE when this action.type comes in
@@ -73,23 +105,10 @@ export function authError(error){
 //create action for logging out
 export function signout(){
   localStorage.removeItem('token');
+  localStorage.removeItem('currentUserFirstName');
+  localStorage.removeItem('currentUserLastName');
+  localStorage.removeItem('currentUserID');
   return {
     type: 'UNAUTH_USER'
   }
 }
-
-
-
-// export function fetchMessage(){
-//   return function(dispatch){
-//     axios.get(API_URL, {
-//       headers: {authorization: localStorage.getItem('token')}//this lets us put stuff inside the header of the request. And we set up our backend to look for something called authorization for protected routes
-//     })
-//       .then(response => {
-//         dispatch({
-//           type: 'FETCH_MESSAGE',
-//           payload: response.data
-//         })
-//       });
-//   }
-// }

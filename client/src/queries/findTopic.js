@@ -7,6 +7,7 @@ query FindTopic($id: ID!){
 	    title
 	    imageURL
 	    question
+			createdAt
 			author{
 				id
 				firstName
@@ -15,6 +16,7 @@ query FindTopic($id: ID!){
 			perspectives {
 				id
 				content
+				createdAt
 				author{
 					firstName
 					lastName

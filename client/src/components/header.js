@@ -3,6 +3,7 @@ import {Link} from 'react-router';
 import {Navbar, Modal, Button, Row, Input} from 'react-materialize';
 import {connect} from 'react-redux';
 import {graphql} from 'react-apollo';
+import moment from 'moment';
 
 //Local files
 import addTopic from '../mutations/addTopic';
@@ -20,11 +21,13 @@ class Header extends Component {
       }
 
       addTopic(){
+        let createdAt = moment().calendar();
           this.props.mutate({
             variables: {
               title: this.state.title,
               question: this.state.question,
-              imageURL: this.state.imageURL
+              imageURL: this.state.imageURL,
+              createdAt
             },
             refetchQueries: [{
               query: findAllTopics
@@ -35,7 +38,7 @@ class Header extends Component {
       renderAuthButtons(){
         if (this.props.authenticated) {
           return [
-            <li key='HeaderFirstName'><Link to='#'>{this.props.currentUserName}</Link></li>,
+            <li key='HeaderFirstName'><Link to='/profile'>{this.props.currentUserFirstName}</Link></li>,
             <li key='HeaderSignOut'><Link to="/signout">Sign out</Link></li>
           ]
         } else {
@@ -84,7 +87,7 @@ class Header extends Component {
 function mapStateToProps(state){
   return {
     authenticated: state.auth.authenticated,
-    currentUserName: state.currentUserName
+    currentUserFirstName: state.currentUserFirstName
   }
 }
 

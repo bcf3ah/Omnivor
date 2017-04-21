@@ -7,6 +7,7 @@ export default gql`
     title
     imageURL
     question
+    createdAt
     author {
       id
       firstName

@@ -16,6 +16,9 @@ export default {
     findAllTopics(root, args) {
       return Topic.find({});
     },
+    findUserTopics(root, {id}) {
+      return User.findUserTopics(id);
+    },
     findUserPerspectives(root, {id}){
       return User.findUserPerspectives(id);
     },
@@ -27,11 +30,11 @@ export default {
     }
   },
   Mutation: {
-      addTopic(root, {title, question, imageURL}, context){
-        return User.addTopic(context.user, title, question, imageURL);
+      addTopic(root, {title, question, imageURL, createdAt}, context){
+        return User.addTopic(context.user, title, question, imageURL, createdAt);
       },
-      addPerspective(root, {topicId, content}, context){
-        return User.addPerspective(context.user, content, topicId);
+      addPerspective(root, {topicId, content, createdAt}, context){
+        return User.addPerspective(context.user, content, topicId, createdAt);
       }
   }
 };
