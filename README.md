@@ -1,7 +1,7 @@
 # Omnivor
 I plan to make this a social network for reaching across the aisle, a way for people to hear different points of view. I don't have the skills to finish it yet, but I hope to make it a reality soon. If you'd like to contribute, feel free! I want this to be as open as possible to fit with the theme of honest communication, something our society most certainly needs right now.
 
-# Task
+# Tasks
 GraphQL subscriptions for real-time dialogues
 OAuth
 User profiles
